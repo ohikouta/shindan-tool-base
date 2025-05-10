@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ../shindan-tool-backend       # ルート位置をバックエンドリポに向ける
+      dockerfile: containers/Dockerfile      # バックエンド用 Dockerfile のパス
+    environment:
+      - DJANGO_SETTINGS_MODULE=myproject.settings
+      - PYTHONPATH=/app/src
+      - REDIS_HOST=redis
+    command: daphne -b 0.0.0.0 -p 8000 src.myproject.asgi:application
+    volumes:
+      - ../shindan-tool-backend:/app         # バックエンドコードをマウント
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../shindan-tool-backend/.env.development  # 環境変数ファイルを参照
+    depends_on:
+      - redis
+
+  frontend:
+    build:
+      context: ../shindan-tool-frontend     # フロントエンドリポジトリ
+      dockerfile: Dockerfile               # React 用 Dockerfile
+    volumes:
+      - ../shindan-tool-frontend:/app       # フロントコードをマウント
+    command: npm run dev
+    ports:
+      - "5173:5173"
+    env_file:
+      - ../shindan-tool-frontend/.env.development
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
