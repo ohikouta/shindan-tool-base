@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   backend:
     build:
@@ -29,7 +27,7 @@ services:
     ports:
       - "5173:5173"
     env_file:
-      - ../shindan-tool-frontend/.env.development
+      - ../shindan-tool-frontend/.env
 
   redis:
     image: redis:latest
