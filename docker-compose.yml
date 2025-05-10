@@ -13,7 +13,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ../shindan-tool-backend/.env.development  # 環境変数ファイルを参照
+      - ../shindan-tool-backend/.env  # 環境変数ファイルを参照
     depends_on:
       - redis
 
